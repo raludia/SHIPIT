@@ -42,6 +42,47 @@ def get_option_choice(options: t.Dict[str, Option]) -> Option:
         choice = input("Choose an option: ")
     return options[choice.upper()]
 
+def get_user_input(label: str, required: bool = True) -> t.Optional[str]:
+    value = input(f"{label}: ") or None
+    while required and not value:
+        value = input(f"{label}: ") or None
+    return value
+
+def get_new_shipment_data() -> t.Dict[str, t.Optional[str]]:
+    result = {
+        "customer": get_user_input("Customer"),
+        "address": get_user_input("Customer Address"),
+        "contact": get_user_input("Contact Person"),
+        "phone": get_user_input("Phone number"),
+        "cc": get_user_input("Cost Center"),
+        "incoterm": get_user_input("Incoterm"),
+        "description": get_user_input("Items Description"),
+        "order": get_user_input("Purchase Order", required=False),
+        "tracking": get_user_input("Tracking number", required=False),
+        "notes": get_user_input("Notes", required=False),
+    }
+    return result
+
+def get_shipment_id() -> int:
+    result = int(get_user_input("Enter a shipment ID"))  # type: ignore
+    return result
+
+def get_update_shipment_data() -> t.Dict[str, t.Union[int, t.Dict[str, str]]]:
+    bookmark_id = int(get_user_input("Enter a shipment ID to edit"))
+    field = get_user_input("Choose a value to edit (customer, address, contact, phone, cc, incoterm, description, order, tracking, notes)")
+    new_value = get_user_input(f"Enter a new value for {field}")
+    return {"id": bookmark_id, "update": {field: new_value}}
+
+def get_file_name() -> str:
+    file_name = get_user_input(
+        "Please type in the name of the Excel file where you want to save"
+    )
+    return file_name
+
+def get_email() -> t.Dict[str, str]:
+    recipient = get_user_input("Enter an email")
+    return {"recipient": recipient}
+
 def clear_screen():
     clear_command = "cls" if os.name == "nt" else "clear"
     os.system(clear_command)

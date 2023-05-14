@@ -1,26 +1,40 @@
 from src import commands as c
 from src import presentation as p
 
-if __name__ == "__main__":
-    c.CreateShipmentsTableCommand().execute()
-    print("Welcome to SHIPIT!")
 
 def loop():
     options = {
         "A": p.Option(
             name="Add a shipment",
             command=c.AddShipmentCommand(),
+            prep_call=p.get_new_shipment_data,
+        ),
+        "S": p.Option(
+            name="Get shipment by ID",
+            command=c.GetShipmentCommand(),
+            prep_call=p.get_shipment_id,
         ),
         "B": p.Option(
             name="List shipments by date", 
             command=c.ListShipmentsCommand()),
         "C": p.Option(
-            name="List shipments by customer name",
-            command=c.ListShipmentsCommand(order_by="customer_name"),
+            name="List shipments by customer",
+            command=c.ListShipmentsCommand(order_by="customer"),
+        ),
+        "E": p.Option(
+            name="Edit a shipment",
+            command=c.EditShipmentCommand(),
+            prep_call=p.get_update_shipment_data,
         ),
         "D": p.Option(
             name="Delete a shipment",
             command=c.DeleteShipmentCommand(),
+            prep_call=p.get_file_name
+        ),
+        "X": p.Option(
+            name="Export to Excel",
+            command=c.ExportToExcelCommand(),
+            prep_call=p.get_file_name,
         ),
         "Q": p.Option(
             name="Quit", 

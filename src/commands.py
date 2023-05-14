@@ -6,6 +6,8 @@ import typing as t
 from datetime import datetime
 from pathlib import Path
 
+import openpyxl
+
 from src.database import DatabaseManager
 
 db = DatabaseManager("shipments.db")
@@ -30,15 +32,15 @@ class CreateShipmentsTableCommand:
             table_name="shipments",
             columns={
                 "id": "integer primary key autoincrement",
-                "customer_name": "text not null",
-                "customer_ship_to_address": "text not null",
-                "contact_person": "text not null",
-                "phone_number": "text not null",
-                "cost_center": "text not null",
+                "customer": "text not null",
+                "address": "text not null",
+                "contact": "text not null",
+                "phone": "text not null",
+                "cc": "text not null",
                 "incoterm": "text not null",
-                "item_description": "text not null",
-                "purchase_order": "text",
-                "tracking_number": "text",
+                "description": "text not null",
+                "order": "text",
+                "tracking": "text",
                 "notes": "text",
                 "date_added": "text not null",
             },
@@ -68,12 +70,48 @@ class ListShipmentsCommand:
         results = cursor.fetchall()
         return results
 
+class GetShipmentCommand:
+    """A Command class that will return a single shipment based on an ID"""
+
+    def execute(self, data: int) -> t.Optional[tuple]:
+        result = db.select(table_name="shipments", criteria={"id": data}).fetchone()
+        return result
+
+class EditShipmentCommand:
+    """A Command class that will edit a shipment identified with an ID"""
+
+    def execute(self, data: t.Dict[str, str]) -> str:
+        db.update(
+            table_name="shipments", criteria={"id": data["id"]}, data=data["update"]
+        )
+        return "Bookmark updated!"
+    
 class DeleteShipmentCommand:
     """A Command class that will delete a shipment from the SQL table"""
 
     def execute(self, data: int) -> str:
         db.delete(table_name="shipments", criteria={"id": data})
         return "Shipment deleted!"
+
+class ExportToExcelCommand:
+    """A Command class used to export the data in an Excel format"""
+
+    def execute(self, data: str) -> str:
+        """data (str): the file name of the exported workbook"""
+
+        workbook = openpyxl.Workbook()
+        sheet = workbook.active
+        records = ListShipmentsCommand().execute()
+
+        for row in records:
+            sheet.append(row)
+
+        export_folder_path = Path(f"./exports")
+        export_folder_path.mkdir(parents=True, exist_ok=True)
+
+        workbook.save(export_folder_path / f"{data}.xlsx")
+
+        return f"Exported to file {data}"
 
 class QuitCommand:
     """A Command class that will quit the application"""
