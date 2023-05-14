@@ -14,7 +14,7 @@
 ```
 ### On Unix
 ```
-source .venv/bin/activate
+$ source .venv/bin/activate
 ```
 
 ## Deactivating virtual environment
