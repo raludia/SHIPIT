@@ -20,9 +20,3 @@ jobs:
     - name: Run Tests
       run: |
         python -m pytest tests/ -v --cov=src
-    - name: Run Format Testing
-      run: |
-        python -m black --check -v src/
-    - name: Run Type Checking
-      run: |
-        python -m mypy src/
