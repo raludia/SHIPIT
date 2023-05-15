@@ -16,7 +16,8 @@ def loop():
         ),
         "B": p.Option(
             name="List shipments by date", 
-            command=c.ListShipmentsCommand()),
+            command=c.ListShipmentsCommand()
+        ),
         "C": p.Option(
             name="List shipments by customer",
             command=c.ListShipmentsCommand(order_by="customer"),
@@ -29,7 +30,7 @@ def loop():
         "D": p.Option(
             name="Delete a shipment",
             command=c.DeleteShipmentCommand(),
-            prep_call=p.get_file_name
+            prep_call=p.get_shipment_id
         ),
         "X": p.Option(
             name="Export to Excel",

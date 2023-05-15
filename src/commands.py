@@ -39,11 +39,11 @@ class CreateShipmentsTableCommand:
                 "cc": "text not null",
                 "incoterm": "text not null",
                 "description": "text not null",
-                "order": "text",
+                "PO": "text",
                 "tracking": "text",
                 "notes": "text",
-                "date_added": "text not null",
-            },
+                "date_added": "text not null"
+            }
         )
 
 class AddShipmentCommand:
@@ -84,7 +84,7 @@ class EditShipmentCommand:
         db.update(
             table_name="shipments", criteria={"id": data["id"]}, data=data["update"]
         )
-        return "Bookmark updated!"
+        return "Shipment updated!"
     
 class DeleteShipmentCommand:
     """A Command class that will delete a shipment from the SQL table"""

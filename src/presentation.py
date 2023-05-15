@@ -50,16 +50,16 @@ def get_user_input(label: str, required: bool = True) -> t.Optional[str]:
 
 def get_new_shipment_data() -> t.Dict[str, t.Optional[str]]:
     result = {
-        "customer": get_user_input("Customer"),
-        "address": get_user_input("Customer Address"),
+        "customer": get_user_input("Customer Name"),
+        "address": get_user_input("Customer address"),
         "contact": get_user_input("Contact Person"),
-        "phone": get_user_input("Phone number"),
+        "phone": get_user_input("Phone Number"),
         "cc": get_user_input("Cost Center"),
         "incoterm": get_user_input("Incoterm"),
-        "description": get_user_input("Items Description"),
-        "order": get_user_input("Purchase Order", required=False),
-        "tracking": get_user_input("Tracking number", required=False),
-        "notes": get_user_input("Notes", required=False),
+        "description": get_user_input("Description"),
+        "PO": get_user_input("Purchase Order (not mandatory)", required=False),
+        "tracking": get_user_input("Tracking (not mandatory)", required=False),
+        "notes": get_user_input("Notes (not mandatory)", required=False),
     }
     return result
 
@@ -68,10 +68,10 @@ def get_shipment_id() -> int:
     return result
 
 def get_update_shipment_data() -> t.Dict[str, t.Union[int, t.Dict[str, str]]]:
-    bookmark_id = int(get_user_input("Enter a shipment ID to edit"))
+    shipment_id = int(get_user_input("Enter a shipment ID to edit"))
     field = get_user_input("Choose a value to edit (customer, address, contact, phone, cc, incoterm, description, order, tracking, notes)")
     new_value = get_user_input(f"Enter a new value for {field}")
-    return {"id": bookmark_id, "update": {field: new_value}}
+    return {"id": shipment_id, "update": {field: new_value}}
 
 def get_file_name() -> str:
     file_name = get_user_input(
